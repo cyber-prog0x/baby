@@ -14,3 +14,5 @@ _A Nice and Neat Secure Shell Management Tool_
 - xcode-select install
 - iTerm2
 
+**YOU ALSO NEED TO ADD SSH CONFIGURATIONS TO FILE ~/.babyrc**
+
