@@ -175,11 +175,11 @@ func list_detail(index int64) {
 	username := cfg.Section(serverName).Key("username")
 	password := cfg.Section(serverName).Key("password")
 	fmt.Printf("%c[1;40;32m##################################################%c[0m\n", 0x1B, 0x1B)
-	fmt.Printf("%c[1;40;32m#\tSERVER [%s] DETAILS%c[0m\t\n",0x1B, serverName, 0x1B)
-	fmt.Printf("%c[1;40;32m#\tSERVER IP:      \t %s %c[0m\t\n",0x1B, ip, 0x1B)
-	fmt.Printf("%c[1;40;32m#\tSERVER Port:    \t %s %c[0m\t\n",0x1B, port, 0x1B)
-	fmt.Printf("%c[1;40;32m#\tSERVER USERNAME:\t %s %c[0m\t\n",0x1B, username, 0x1B)
-	fmt.Printf("%c[1;40;32m#\tSERVER PASSWORD:\t %s %c[0m\t\n",0x1B, password, 0x1B)
+	fmt.Printf("%c[1;40;32m#\tSERVER %c[0m%c[1;40;31m[%s]%c[0m %c[1;40;32mDETAILS%c[0m\t\n",0x1B, 0x1B, 0x1B, serverName, 0x1B, 0x1B, 0x1B)
+	fmt.Printf("%c[1;40;32m#\tSERVER IP:      \t %c[0m%c[1;40;31m%s %c[0m\t\n",0x1B, 0x1B, 0x1B, ip, 0x1B)
+	fmt.Printf("%c[1;40;32m#\tSERVER Port:    \t %c[0m%c[1;40;31m%s %c[0m\t\n",0x1B, 0x1B, 0x1B, port, 0x1B)
+	fmt.Printf("%c[1;40;32m#\tSERVER USERNAME:\t %c[0m%c[1;40;31m%s %c[0m\t\n",0x1B, 0x1B, 0x1B, username, 0x1B)
+	fmt.Printf("%c[1;40;32m#\tSERVER PASSWORD:\t %c[0m%c[1;40;31m%s %c[0m\t\n",0x1B, 0x1B, 0x1B, password, 0x1B)
 	fmt.Printf("%c[1;40;32m##################################################%c[0m\n", 0x1B, 0x1B)
 }
 
