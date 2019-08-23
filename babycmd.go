@@ -5,35 +5,72 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/user"
 	"strconv"
 
 	"github.com/go-ini/ini"
 )
 
-var babyrc string = "/Users/Kios/.babyrc"
-var babysh string = "/Users/Kios/baby.sh"
+var babyrc string
+var babysh string
 
-func init() {}
+func init() {
+	env_check()
+}
+
+func PathExist(_path string) bool {
+	_, err := os.Stat(_path)
+	if err != nil && os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
 
 func env_check() {
-	// check sshpass command is valid
+	// check if sshpass command was valid
 	// command: brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
-	chk_cmd := "sshpass"
+	chk_cmd := "which sshpass"
 	install_sshpass := "brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb"
 	cmd := exec.Command(chk_cmd)
-	log.Printf("Running chk command and waiting for it to finish...")
+	log.Printf("RUNNING CHK AND WAITING FOR IT TO FINISH...")
 	err := cmd.Run()
 	if (err != nil) {
-		fmt.Println("PREPARE TO INSTALL SSHPASS VIA HOMEBREW")
+		log.Printf("ALREADY INSTALLED SSHPASS")
+	} else {
+		log.Printf("PREPARE TO INSTALL SSHPASS VIA HOMEBREW")
 		install_cmd := exec.Command(install_sshpass)
 		err := install_cmd.Run()
 
 		if err != nil {
-			fmt.Println("INSTALL COMPLETE!")
+			log.Printf("INSTALL COMPLETE!")
 		}
 	}
-	log.Printf("Command finished with error: %v", err)
+
+	usr, err := user.Current()
+	if err != nil {
+		log.Fatal( err )
+	}
+	babyrc = usr.HomeDir + "/.babyrc"
+	babysh = usr.HomeDir + "/baby.sh"
+
+	// check if the configuration file exists or not
+	rcExist := PathExist(babyrc)
+	if (!rcExist) {
+		log.Printf("LOCAL CONFIGURATION FILE DOES NOT EXIST!")
+		log.Printf("PREPARE TO CREATE EMPTY ONE!")
+
+		f,err := os.Create(babyrc)
+		defer f.Close()
+		if err !=nil {
+			log.Printf(err.Error())
+		} else {
+			log.Printf("CREATE LOCAL EMPTY CONFIGURATION FILE COMPLETE!")
+		}
+	} else {
+		log.Printf("LOCAL CONFIGURATION FILE EXIST! ALL DONE HAVE FUN!")
+	}
 }
+
 
 func banner() {
 	fmt.Printf("%c[1;40;32m##################################################%c[0m\n", 0x1B, 0x1B)
@@ -100,7 +137,6 @@ func connect_via_ssh(index int64) {
 		return
 	}
 
-	// fmt.Printf("%c[1;40;32m# Command: %s%c[0m\t\n",0x1B, cmd_str, 0x1B)
 	cmd := exec.Command("/Applications/iTerm.app/Contents/MacOS/iTerm2", babysh)
 	err = cmd.Run()
 
@@ -175,8 +211,6 @@ func logic() {
 		command := os.Args[1]
 		if command == "ls" {
 			baby_list()
-		} else if(command == "env_check") {
-			env_check()
 		} else if(command == "test") {
 			file_test()
 		} else {
