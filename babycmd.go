@@ -162,24 +162,6 @@ func remove_sh(filename string) {
 	}
 }
 
-func file_test() {
-	f, err := os.Create(babysh)
-	check(err)
-
-	var cmd string = "echo 999"
-	f.WriteString(cmd)
-	f.Sync()
-	f.Close()
-
-	err = os.Chmod(babysh, 0777)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	remove_sh(babysh)
-}
-
 func list_detail(index int64) {
 	cfg, err := ini.Load(babyrc)
 	if err != nil {
@@ -211,8 +193,6 @@ func logic() {
 		command := os.Args[1]
 		if command == "ls" {
 			baby_list()
-		} else if(command == "test") {
-			file_test()
 		} else {
 			banner()
 			fmt.Printf("%c[1;40;31m[!] COMMAND NOT SUPPORTED%c[0m\n", 0x1B, 0x1B)
